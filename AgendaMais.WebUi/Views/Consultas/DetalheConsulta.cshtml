@@ -1,0 +1,146 @@
+﻿@model AgendaMais.Domain.Entities.Consulta
+
+<style>
+    #btnEditar:hover {
+        cursor: pointer;
+    }
+</style>
+
+<div class="row">
+    <div class="col-12 mt-3 text-center">
+        <h3>Detalhes da consulta</h3>
+    </div>
+</div>
+<div class="col-12 ml-3 mt-3">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-dark text-light"><i class="fal fa-arrow-to-left"></i> Voltar</a>
+    </div>
+<hr />
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="font-weight-light"> @Model.Title</h3>
+                </div>
+                <div>
+                     <!-- Editar -->
+                    <span id="btnEditar"><i class="fas fa-edit fa-2x" data-toggle="modal" data-target="#modalEdicaoConsulta"></i></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="font-weight-light">Data: @Model.Start</p>
+                <p class="font-weight-light">Email: @Model.Email</p>
+                <p class="font-weight-light">Detalhes: @Model.Description</p>
+                <p class="font-weight-light">Doutor(a): <strong>@Model.Profissional.Nome</strong></p>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-2 m-3">
+                    <!-- Cadastrar -->
+                    <input type="hidden" id="idConsulta" value="@Model.Id" />
+                    <button type="button" class="btn btn-dark" id="btFinalizaConsulta">
+                        Finalizar Consulta <i class="fas fa-file-medical ml-2"></i>
+                    </button>
+                </div>
+                <!-- Consultas de hoje -->
+                <div class="col-3 m-3">
+                    <button type="button" class="btn btn-danger" id="btCancelaConsulta">
+                        Cancelar Consulta <i class="fas fa-file-medical ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--Modal Edição de Consultas-->
+<div class="modal fade" id="modalEdicaoConsulta" tabindex="-1" role="dialog" aria-labelledby="modalEdicaoConsulta" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEdicaoConsulta">Edição de Consulta </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/Consultas/EditarConsulta" method="post">
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="hidden" value="@ViewBag.Consulta.Id" name="id"/>
+                            <div class="form-group">
+                                <label>Titulo</label>
+                                <input type="text" class="form-control" name="title" id="title" placeholder="Ex: Nome do paciente" value="@ViewBag.Consulta.Title"/>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" class="form-control" name="description" id="description" placeholder="Ex: Exame de sangue" value="@ViewBag.Consulta.Description"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Ex: email@email.com" value="@ViewBag.Consulta.Email"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Hora da Consulta</label>
+                                <input type="datetime-local" class="form-control" name="dtInicio" id="dtInicio" value="@ViewBag.Consulta.Start"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Profissional</label>
+                                <select class="form-control" id="profissionalId" name="profissionalId" asp-items="ViewBag.Profissionais">
+                                    <option value="">Selecione um profissional...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        var btnFinaliza = document.getElementById("btFinalizaConsulta");
+        var btnCancela = document.getElementById("btCancelaConsulta");
+        var idConsulta = document.getElementById("idConsulta").value;
+
+            
+        if (btnFinaliza) {
+            btnFinaliza.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (confirm("Você deseja realmente finalizar essa consulta?")) {
+                    window.location.href = "/Consultas/FinalizarConsulta/" + idConsulta;
+                }
+            });
+        }
+
+
+
+        if (btnCancela) {
+            btnCancela.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (confirm("Você deseja realmente cancelar essa consulta?")) {
+                    window.location.href = "/Consultas/CancelarConsulta/" + idConsulta;
+                }
+            });
+        }
+
+    </script>
+}

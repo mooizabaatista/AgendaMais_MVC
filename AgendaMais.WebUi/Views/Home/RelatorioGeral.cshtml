@@ -1,0 +1,39 @@
+﻿@model IEnumerable<AgendaMais.Domain.Entities.Consulta>
+
+<!-- Header -->
+<div class="row">
+    <div class="col-12 ml-3 mt-3">
+        <h3>Lista com todas as consultas</h3>
+        <br />
+        <a asp-action="Index" class="btn btn-dark text-light"><i class="fal fa-arrow-to-left"></i> Voltar</a>
+    </div>
+</div>
+
+<hr />
+
+<!-- Tabela com todas as consultas -->
+<div class="row">
+    <div class="col-12">
+        <table class="table table-bordered table-hover table-sm text-center">
+            <thead class="bg-dark text-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Doutor(a)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Description</td>
+                        <td>@item.Start</td>
+                        <td>@item.Profissional.Nome</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
